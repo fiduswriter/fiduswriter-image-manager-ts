@@ -9,7 +9,7 @@ and cropping, and a selection dialog for inserting images into documents.
 
 - Package name: `@fiduswriter/image-manager`
 - License: `AGPL-3.0`
-- Repository: `https://codeberg.org/fiduswriter/fiduswriter-image-manager.git`
+- Repository: `https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts.git`
 - Author: Johannes Wilm
 
 ## Scope
