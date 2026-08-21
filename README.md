@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://codeberg.org/fiduswriter/fiduswriter-image-manager-ts/raw/branch/main/logo.svg" alt="@fiduswriter/image-manager" width="100" height="100">
+  <img src="https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts/raw/branch/main/logo.svg" alt="@fiduswriter/image-manager" width="100" height="100">
 </p>
 
 <h1 align="center">@fiduswriter/image-manager</h1>
