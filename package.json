@@ -1,6 +1,6 @@
 {
   "name": "@fiduswriter/image-manager",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "Fidus Writer image/media manager",
   "keywords": [
     "fiduswriter",
@@ -89,7 +89,7 @@
     "bibliojson": "^4.0.3",
     "cropperjs": "^1.6.2",
     "fast-deep-equal": "^3.1.3",
-    "fwtoolkit": "^0.2.18",
+    "fwtoolkit": "^0.2.19",
     "simple-datatables": "^10.3.0"
   },
   "devDependencies": {

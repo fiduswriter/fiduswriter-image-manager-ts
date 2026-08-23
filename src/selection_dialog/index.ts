@@ -2,8 +2,10 @@ import {
   Dialog,
   SelectionDataTable,
   cancelPromise,
+  ensureCSS,
   escapeText,
   gettext,
+  staticUrl,
 } from "fwtoolkit";
 import type { DialogButtonSpec } from "fwtoolkit/basic";
 import type { DataTable } from "simple-datatables";
@@ -30,6 +32,12 @@ export class ImageSelectionDialog {
 
   table: DataTable | null = null;
 
+  /** Resolves the promise returned by the current init() call. */
+  resolveSelection!: (value: unknown) => void;
+
+  /** Whether an upload dialog opened from this dialog is open. */
+  uploadInProgress = false;
+
   constructor(
     imageDB: ImageDB,
     userImageDB: ImageDB,
@@ -49,12 +57,9 @@ export class ImageSelectionDialog {
   }
 
   init(): Promise<unknown> {
-    console.log(
-      "DEBUG selection init: docImages=",
-      Object.keys(this.imageDB.db).length,
-      "userImages=",
-      Object.keys(this.userImageDB.db).length,
-    );
+    // Load the dialog styles in case the host page does not include them
+    // (for example in the standalone editor demo).
+    ensureCSS([staticUrl("css/dialog_usermedia.css")]);
     this.images = Object.values(this.imageDB.db).map((image) => ({
       image,
       db: "document" as const,
@@ -68,37 +73,14 @@ export class ImageSelectionDialog {
         db: "user" as const,
       });
     });
-    console.log("DEBUG selection images=", this.images.length);
     const buttons: DialogButtonSpec[] = [];
     const p = new Promise((resolve) => {
+      this.resolveSelection = resolve;
       if (!this.page.app.isOffline()) {
         buttons.push({
           text: gettext("Add new image"),
           icon: "plus-circle",
-          click: () => {
-            import("../edit_dialog/index.js").then(({ ImageEditDialog }) => {
-              const targetDB = this.isE2EE() ? this.imageDB : this.userImageDB;
-              const imageUpload = new ImageEditDialog(
-                targetDB,
-                false,
-                this.page,
-              );
-
-              resolve(
-                imageUpload.init().then((imageId) => {
-                  console.log("DEBUG upload resolved imageId=", imageId);
-                  this.imgId = imageId || false;
-                  // For E2EE docs the image goes straight
-                  // into the document DB, not the user's.
-                  this.imgDb = this.isE2EE() ? "document" : "user";
-                  console.log("DEBUG closing selection dialog");
-                  this.imageDialog.close();
-                  console.log("DEBUG reinit selection dialog");
-                  return this.init();
-                }),
-              );
-            });
-          },
+          click: () => this.addNewImage(),
         });
       }
 
@@ -107,7 +89,7 @@ export class ImageSelectionDialog {
         classes: "fw-dark",
         click: () => {
           this.imageDialog.close();
-          resolve({ id: this.imgId, db: this.imgDb });
+          this.resolveSelection({ id: this.imgId, db: this.imgDb });
         },
       });
 
@@ -115,13 +97,13 @@ export class ImageSelectionDialog {
         type: "cancel" as const,
         click: () => {
           this.imageDialog.close();
-          resolve(cancelPromise());
+          this.resolveSelection(cancelPromise());
         },
       });
     });
     this.imageDialog = new Dialog({
       buttons,
-      width: 300,
+      width: 560,
       body: '<div class="image-selection-table"></div>',
       title: gettext("Images"),
       id: "select-image-dialog",
@@ -130,6 +112,44 @@ export class ImageSelectionDialog {
     this.initTable();
     this.imageDialog.centerDialog();
     return p;
+  }
+
+  addNewImage(): void {
+    if (this.uploadInProgress) {
+      return;
+    }
+    this.uploadInProgress = true;
+    import("../edit_dialog/index.js")
+      .then(({ ImageEditDialog }) => {
+        const targetDB = this.isE2EE() ? this.imageDB : this.userImageDB;
+        const imageUpload = new ImageEditDialog(targetDB, false, this.page);
+        // The upload dialog's promise always settles: it resolves with the
+        // new image id on success and with undefined when the dialog is
+        // cancelled or closed without uploading.
+        return imageUpload.init().then((imageId) => {
+          this.uploadInProgress = false;
+          if (!imageId) {
+            // The upload was cancelled. Keep showing the current selection
+            // dialog unchanged.
+            return;
+          }
+          this.imgId = imageId;
+          // For E2EE docs the image goes straight
+          // into the document DB, not the user's.
+          this.imgDb = this.isE2EE() ? "document" : "user";
+          this.imageDialog.close();
+          // Reopen with an updated image list. The reopened dialog gets its
+          // own promise; forward its eventual outcome to the caller of the
+          // original init(). The previous resolver has to be captured before
+          // calling init(), which replaces it.
+          const forwardTo = this.resolveSelection;
+          void this.init().then((result) => forwardTo(result));
+        });
+      })
+      .catch((error) => {
+        this.uploadInProgress = false;
+        throw error;
+      });
   }
 
   initTable(): void {
@@ -156,21 +176,24 @@ export class ImageSelectionDialog {
         {
           select: 0,
           hidden: true,
-        },
-        {
-          select: [0, 2],
-          type: "string",
-        },
-        {
-          select: [1, 3],
           sortable: false,
+        },
+        {
+          select: 1,
+          name: gettext("Image"),
+          sortable: false,
+        },
+        {
+          select: 2,
+          name: gettext("Title"),
+          type: "string",
         },
       ],
       data: this.images.map((image) => this.createTableRow(image)),
       idColumn: 0,
       multiple: false,
       selectedIds,
-      scrollY: "270px",
+      scrollY: "470px",
       labels: {
         noRows: gettext("No images available"), // Message shown when there are no images
         noResults: gettext("No images found"), // Message shown when no images are found after search
@@ -188,15 +211,34 @@ export class ImageSelectionDialog {
     });
     this.selectionTable.init();
     this.table = this.selectionTable.table!;
+    // Start out sorted by title so the sorting option is visible.
+    this.table.columns.sort(2, "asc");
   }
 
   createTableRow(image: ImageSelectionItem): [string, string, string] {
+    const img = image.image;
+    const infoParts: string[] = [];
+    // For SVG images the server stores no width/height and no thumbnail.
+    const fileTypeParts = String(img.file_type || "").split("/");
+    if (fileTypeParts.length > 1 && fileTypeParts[1]) {
+      infoParts.push(fileTypeParts[1].toUpperCase());
+    } else if (fileTypeParts[0]) {
+      infoParts.push(fileTypeParts[0].toUpperCase());
+    }
+    if (img.width && img.height) {
+      infoParts.push(`${img.width}×${img.height}`);
+    }
     return [
-      `${image.db}-${image.image.id}`,
-      image.image.thumbnail === undefined
-        ? `<img src="${image.image.image}" style="max-heigth:30px;max-width:30px;">`
-        : `<img src="${image.image.thumbnail}" style="max-heigth:30px;max-width:30px;">`,
-      escapeText(image.image.title),
+      `${image.db}-${img.id}`,
+      `<span class="fw-image-preview">
+          <img src="${img.thumbnail ? img.thumbnail : img.image}" alt="">
+          ${
+            infoParts.length
+              ? `<span class="fw-image-info">${infoParts.join(", ")}</span>`
+              : ""
+          }
+      </span>`,
+      escapeText(img.title.length ? img.title : gettext("Untitled")),
     ];
   }
 }
