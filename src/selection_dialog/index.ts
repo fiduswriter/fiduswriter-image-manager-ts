@@ -1,6 +1,7 @@
 import {
   Dialog,
   SelectionDataTable,
+  addAlert,
   cancelPromise,
   ensureCSS,
   escapeText,
@@ -9,9 +10,15 @@ import {
 } from "fwtoolkit";
 import type { DialogButtonSpec } from "fwtoolkit/basic";
 import type { DataTable } from "simple-datatables";
+import { E2EEEncryptor } from "fwtoolkit/e2ee/encryptor";
 
 import type { ImageDB } from "../database.js";
-import type { ImageManagerPage, ImageSelectionItem } from "../types.js";
+import type {
+  ImageManagerPage,
+  ImagePicker,
+  ImageSelectionItem,
+  SaveImageRequest,
+} from "../types.js";
 
 export class ImageSelectionDialog {
   imageDB: ImageDB;
@@ -65,7 +72,12 @@ export class ImageSelectionDialog {
       db: "document" as const,
     }));
     Object.values(this.userImageDB.db).forEach((image) => {
-      if (this.imageDB.db[image.id]) {
+      // The document and user image DBs use independent id namespaces
+      // (per-document ids vs. session/server sequence), so an id collision
+      // does not mean the entries are the same image — only skip when the
+      // payload (the image URL/data URL identifying the file) matches too.
+      const documentImage = this.imageDB.db[image.id];
+      if (documentImage && documentImage.image === image.image) {
         return;
       }
       this.images.push({
@@ -114,12 +126,24 @@ export class ImageSelectionDialog {
     return p;
   }
 
-  addNewImage(): void {
+  addNewImage(): Promise<unknown> {
     if (this.uploadInProgress) {
-      return;
+      return Promise.resolve();
     }
+    const picker = this.page.imagePicker;
+    if (typeof picker === "function") {
+      // The host page (for example a Nextcloud or WordPress integration)
+      // provides its own file picker; use it instead of the built-in
+      // upload dialog.
+      return this.addHostPickedImage(picker);
+    }
+    return this.openUploadDialog();
+  }
+
+  /** Open the built-in upload dialog (the default "Add new image" flow). */
+  private openUploadDialog(): Promise<unknown> {
     this.uploadInProgress = true;
-    import("../edit_dialog/index.js")
+    return import("../edit_dialog/index.js")
       .then(({ ImageEditDialog }) => {
         const targetDB = this.isE2EE() ? this.imageDB : this.userImageDB;
         const imageUpload = new ImageEditDialog(targetDB, false, this.page);
@@ -133,23 +157,89 @@ export class ImageSelectionDialog {
             // dialog unchanged.
             return;
           }
-          this.imgId = imageId;
-          // For E2EE docs the image goes straight
-          // into the document DB, not the user's.
-          this.imgDb = this.isE2EE() ? "document" : "user";
-          this.imageDialog.close();
-          // Reopen with an updated image list. The reopened dialog gets its
-          // own promise; forward its eventual outcome to the caller of the
-          // original init(). The previous resolver has to be captured before
-          // calling init(), which replaces it.
-          const forwardTo = this.resolveSelection;
-          void this.init().then((result) => forwardTo(result));
+          this.finishAddNewImage(imageId);
         });
       })
       .catch((error) => {
         this.uploadInProgress = false;
         throw error;
       });
+  }
+
+  /**
+   * "Add new image" via a host-provided picker. Resolves with the picked
+   * image File, or with a falsy value when the user cancelled.
+   */
+  private async addHostPickedImage(picker: ImagePicker): Promise<void> {
+    this.uploadInProgress = true;
+    try {
+      const file = await picker();
+      if (!file) {
+        // The pick was cancelled. Keep showing the current selection
+        // dialog unchanged.
+        return;
+      }
+      const imageId = await this.savePickedImage(file);
+      this.finishAddNewImage(imageId);
+    } catch (error) {
+      addAlert("error", gettext("The image could not be added."));
+      throw error;
+    } finally {
+      this.uploadInProgress = false;
+    }
+  }
+
+  /**
+   * Save an image File coming from a host-provided picker. Mirrors the
+   * upload defaults of the edit dialog: title derived from the file name,
+   * default copyright, no categories; encrypted for E2EE documents.
+   */
+  private async savePickedImage(file: File): Promise<number> {
+    const targetDB = this.isE2EE() ? this.imageDB : this.userImageDB;
+    const imageData: SaveImageRequest = {
+      title:
+        file.name
+          .replace(/\.[^./]+$/, "")
+          .replace(/[_-]+/g, " ")
+          .trim() || gettext("Untitled"),
+      copyright: {
+        holder: false,
+        year: false,
+        freeToRead: true,
+        licenses: [],
+      },
+      cats: [],
+      image: file,
+    };
+    if (this.isE2EE() && imageData.image) {
+      imageData.image = await E2EEEncryptor.encryptImage(
+        imageData.image,
+        this.page.e2ee!.key,
+      );
+      imageData.original_file_type = file.type || "image/png";
+      // Encrypt copyright metadata so the server cannot read it
+      imageData.copyright = await E2EEEncryptor.encryptObject(
+        imageData.copyright,
+        this.page.e2ee!.key,
+      );
+    }
+    return targetDB.saveImage(imageData);
+  }
+
+  /**
+   * Select a newly added image and reopen the dialog with an updated image
+   * list. The reopened dialog gets its own promise; forward its eventual
+   * outcome to the caller of the original init(). The previous resolver has
+   * to be captured before calling init(), which replaces it.
+   */
+  private finishAddNewImage(imageId: number): void {
+    this.imgId = imageId;
+    // For E2EE docs the image goes straight
+    // into the document DB, not the user's.
+    this.imgDb = this.isE2EE() ? "document" : "user";
+    this.imageDialog.close();
+    const forwardTo = this.resolveSelection;
+    void this.init().then((result) => forwardTo(result));
   }
 
   initTable(): void {

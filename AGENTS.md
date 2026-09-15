@@ -72,3 +72,15 @@ npm run format:check # Check formatting with Prettier
 - `fiduswriter/` (the main Fidus Writer Django app).
 - `@fiduswriter/editor` for the document editor.
 - `@fiduswriter/common` for shared page chrome.
+
+## Notes
+
+- **Host-provided image picker**: the selection dialog's "Add new image"
+  invokes `page.imagePicker` (a `() => Promise<File | null | undefined>`)
+  when the host page provides one — platform file pickers such as the
+  Nextcloud file picker (`fiduswriter-nextcloud`, via
+  `createNextcloudImagePicker`) or the WordPress media library
+  (`fiduswriter-wordpress`, `createWpImagePicker`) use this to replace the
+  built-in upload dialog. Without a picker the built-in upload dialog is
+  used. The picker result flows through the same save pipeline as the
+  built-in dialog (default copyright, E2EE encryption).

@@ -43,6 +43,15 @@ export interface E2EEContext {
   key: CryptoKey;
 }
 
+/**
+ * Host-provided image picker (for platform file pickers). When set on the
+ * page object, the selection dialog invokes it instead of the built-in
+ * upload dialog when the user activates "Add new image". It must resolve
+ * with the picked image File, or with null/undefined when the user
+ * cancelled the pick.
+ */
+export type ImagePicker = () => Promise<File | null | undefined>;
+
 /** API connector for image server operations. */
 export interface ImageApi {
   getImages(): Promise<ImagesResponse>;
@@ -75,6 +84,8 @@ export interface ImageManagerPage {
   app: ImageManagerApp;
   e2ee?: E2EEContext;
   menu?: unknown;
+  /** Optional host-provided image picker (see {@link ImagePicker}). */
+  imagePicker?: ImagePicker;
   [key: string]: unknown;
 }
 
