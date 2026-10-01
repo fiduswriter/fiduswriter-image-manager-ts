@@ -1,3 +1,3 @@
 export function convertLatexToMathMl() {
-  return "";
+    return ""
 }

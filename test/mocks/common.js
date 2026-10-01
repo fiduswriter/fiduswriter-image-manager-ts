@@ -1,6 +1,6 @@
 export class FeedbackTab {}
 export class SiteMenu {}
 export function baseBodyTemplate() {
-  return "";
+    return ""
 }
 export function filterPrimaryEmail() {}

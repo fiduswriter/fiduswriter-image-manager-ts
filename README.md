@@ -33,11 +33,11 @@ npm install @fiduswriter/image-manager
 
 ```ts
 import {
-  ImageDB,
-  ImageOverview,
-  ImageEditDialog,
-  ImageSelectionDialog,
-} from "@fiduswriter/image-manager";
+    ImageDB,
+    ImageOverview,
+    ImageEditDialog,
+    ImageSelectionDialog
+} from "@fiduswriter/image-manager"
 ```
 
 ## Development

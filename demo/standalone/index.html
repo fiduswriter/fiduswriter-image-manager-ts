@@ -1,73 +1,74 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Overview — Standalone Demo</title>
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: #f5f6fa;
-        color: #2c3e50;
-        line-height: 1.6;
-      }
-      #app {
-        min-height: 100vh;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Image Overview — Standalone Demo</title>
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                background: #f5f6fa;
+                color: #2c3e50;
+                line-height: 1.6;
+            }
+            #app {
+                min-height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
 
-    <script type="importmap">
-      {
-        "imports": {
-          "@fiduswriter/image-manager": "../../dist/index.js",
-          "@fiduswriter/image-manager/": "../../dist/",
-          "fwtoolkit": "../../node_modules/fwtoolkit/dist/index.js",
-          "fwtoolkit/": "../../node_modules/fwtoolkit/dist/",
-          "simple-datatables": "../../node_modules/simple-datatables/dist/esm/index.js",
-          "diff-dom": "../../node_modules/diff-dom/dist/esm/index.mjs"
-        }
-      }
-    </script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "@fiduswriter/image-manager": "../../dist/index.js",
+                    "@fiduswriter/image-manager/": "../../dist/",
+                    "fwtoolkit": "../../node_modules/fwtoolkit/dist/index.js",
+                    "fwtoolkit/": "../../node_modules/fwtoolkit/dist/",
+                    "simple-datatables": "../../node_modules/simple-datatables/dist/esm/index.js",
+                    "diff-dom": "../../node_modules/diff-dom/dist/esm/index.mjs"
+                }
+            }
+        </script>
 
-    <script type="module">
-      import { ImageOverview } from "@fiduswriter/image-manager/overview/index.js";
-      import { MockImageDB } from "../mock/mock-db.js";
+        <script type="module">
+            import { ImageOverview } from "@fiduswriter/image-manager/overview/index.js"
+            import { MockImageDB } from "../mock/mock-db.js"
 
-      // Minimal app object satisfying ImageManagerApp interface.
-      const app = {
-        name: "demo",
-        isOffline: () => false,
-        settings: {
-          APPS: [],
-        },
-        routes: {
-          "": { app: "document" },
-        },
-        imageDB: null,
-      };
+            // Minimal app object satisfying ImageManagerApp interface.
+            const app = {
+                name: "demo",
+                isOffline: () => false,
+                settings: {
+                    APPS: []
+                },
+                routes: {
+                    "": { app: "document" }
+                },
+                imageDB: null
+            }
 
-      // Create the mock database.
-      app.imageDB = new MockImageDB(app);
+            // Create the mock database.
+            app.imageDB = new MockImageDB(app)
 
-      const container = document.getElementById("app");
+            const container = document.getElementById("app")
 
-      const overview = new ImageOverview({
-        app,
-        container,
-      });
+            const overview = new ImageOverview({
+                app,
+                container
+            })
 
-      overview.init();
-    </script>
-  </body>
+            overview.init()
+        </script>
+    </body>
 </html>

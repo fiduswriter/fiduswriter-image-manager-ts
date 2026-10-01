@@ -1,139 +1,139 @@
 {
-  "name": "@fiduswriter/image-manager",
-  "version": "0.1.28",
-  "description": "Fidus Writer image/media manager",
-  "keywords": [
-    "fiduswriter",
-    "image-manager",
-    "media",
-    "cropper",
-    "images"
-  ],
-  "homepage": "https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts",
-  "bugs": {
-    "url": "https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts.git"
-  },
-  "license": "AGPL-3.0",
-  "author": "Johannes Wilm",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./dist/*.js"
-    },
-    "./copyright_dialog": {
-      "types": "./dist/copyright_dialog/index.d.ts",
-      "default": "./dist/copyright_dialog/index.js"
-    },
-    "./copyright_dialog/*": {
-      "types": "./dist/copyright_dialog/*.d.ts",
-      "default": "./dist/copyright_dialog/*.js"
-    },
-    "./edit_dialog": {
-      "types": "./dist/edit_dialog/index.d.ts",
-      "default": "./dist/edit_dialog/index.js"
-    },
-    "./edit_dialog/*": {
-      "types": "./dist/edit_dialog/*.d.ts",
-      "default": "./dist/edit_dialog/*.js"
-    },
-    "./overview": {
-      "types": "./dist/overview/index.d.ts",
-      "default": "./dist/overview/index.js"
-    },
-    "./overview/*": {
-      "types": "./dist/overview/*.d.ts",
-      "default": "./dist/overview/*.js"
-    },
-    "./selection_dialog": {
-      "types": "./dist/selection_dialog/index.d.ts",
-      "default": "./dist/selection_dialog/index.js"
-    },
-    "./selection_dialog/*": {
-      "types": "./dist/selection_dialog/*.d.ts",
-      "default": "./dist/selection_dialog/*.js"
-    }
-  },
-  "files": [
-    "css/",
-    "dist/",
-    "src/",
-    "locale/*/messages.json",
-    "LICENSE",
-    "README.md",
-    "logo.svg"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run build",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.js",
-    "install-hooks": "husky"
-  },
-  "dependencies": {
-    "bibliojson": "^4.0.3",
-    "cropperjs": "^1.6.2",
-    "fast-deep-equal": "^3.1.3",
-    "fwtoolkit": "^0.2.26",
-    "simple-datatables": "^10.3.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@swc/core": "^1.16.1",
-    "@swc/jest": "^0.2.39",
-    "@types/jest": "^30.0.0",
-    "@typescript/native": "npm:typescript@^7.0.2",
-    "eslint": "^10.6.0",
-    "gettext-parser": "^9.1.1",
-    "globals": "^15.15.0",
-    "happy-dom": "^20.10.6",
-    "husky": "^9.1.7",
-    "jest": "^30.4.2",
-    "lint-staged": "^17.0.8",
-    "prettier": "^3.5.3",
-    "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.67.0"
-  },
-  "fiduswriter": {
-    "css": {
-      "fwtoolkit": [
-        "colors.css",
-        "forms.css",
-        "buttons.css",
-        "dialog.css",
-        "data_table.css",
-        "common.css",
-        "loader.css"
-      ],
-      "own": {
-        "additive": [],
-        "component": [
-          "dialog_usermedia.css"
-        ]
-      }
-    }
-  },
-  "lint-staged": {
-    "*.{ts,js,mjs,css,md,json,html}": [
-      "prettier --write"
+    "name": "@fiduswriter/image-manager",
+    "version": "0.1.28",
+    "description": "Fidus Writer image/media manager",
+    "keywords": [
+        "fiduswriter",
+        "image-manager",
+        "media",
+        "cropper",
+        "images"
     ],
-    "*.{ts,js,mjs}": [
-      "eslint --fix"
-    ]
-  }
+    "homepage": "https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts",
+    "bugs": {
+        "url": "https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://git.fiduswriter.org/fiduswriter/fiduswriter-image-manager-ts.git"
+    },
+    "license": "AGPL-3.0",
+    "author": "Johannes Wilm",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./*": {
+            "types": "./dist/*.d.ts",
+            "default": "./dist/*.js"
+        },
+        "./copyright_dialog": {
+            "types": "./dist/copyright_dialog/index.d.ts",
+            "default": "./dist/copyright_dialog/index.js"
+        },
+        "./copyright_dialog/*": {
+            "types": "./dist/copyright_dialog/*.d.ts",
+            "default": "./dist/copyright_dialog/*.js"
+        },
+        "./edit_dialog": {
+            "types": "./dist/edit_dialog/index.d.ts",
+            "default": "./dist/edit_dialog/index.js"
+        },
+        "./edit_dialog/*": {
+            "types": "./dist/edit_dialog/*.d.ts",
+            "default": "./dist/edit_dialog/*.js"
+        },
+        "./overview": {
+            "types": "./dist/overview/index.d.ts",
+            "default": "./dist/overview/index.js"
+        },
+        "./overview/*": {
+            "types": "./dist/overview/*.d.ts",
+            "default": "./dist/overview/*.js"
+        },
+        "./selection_dialog": {
+            "types": "./dist/selection_dialog/index.d.ts",
+            "default": "./dist/selection_dialog/index.js"
+        },
+        "./selection_dialog/*": {
+            "types": "./dist/selection_dialog/*.d.ts",
+            "default": "./dist/selection_dialog/*.js"
+        }
+    },
+    "files": [
+        "css/",
+        "dist/",
+        "src/",
+        "locale/*/messages.json",
+        "LICENSE",
+        "README.md",
+        "logo.svg"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm run build",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.js",
+        "install-hooks": "husky"
+    },
+    "dependencies": {
+        "bibliojson": "^4.0.3",
+        "cropperjs": "^1.6.2",
+        "fast-deep-equal": "^3.1.3",
+        "fwtoolkit": "^0.2.26",
+        "simple-datatables": "^10.3.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@swc/core": "^1.16.1",
+        "@swc/jest": "^0.2.39",
+        "@types/jest": "^30.0.0",
+        "@typescript/native": "npm:typescript@^7.0.2",
+        "eslint": "^10.6.0",
+        "gettext-parser": "^9.1.1",
+        "globals": "^15.15.0",
+        "happy-dom": "^20.10.6",
+        "husky": "^9.1.7",
+        "jest": "^30.5.2",
+        "lint-staged": "^17.0.8",
+        "prettier": "^3.5.3",
+        "typescript": "npm:@typescript/typescript6@^6.0.2",
+        "typescript-eslint": "^8.67.0"
+    },
+    "fiduswriter": {
+        "css": {
+            "fwtoolkit": [
+                "colors.css",
+                "forms.css",
+                "buttons.css",
+                "dialog.css",
+                "data_table.css",
+                "common.css",
+                "loader.css"
+            ],
+            "own": {
+                "additive": [],
+                "component": [
+                    "dialog_usermedia.css"
+                ]
+            }
+        }
+    },
+    "lint-staged": {
+        "*.{ts,js,mjs,css,md,json,html}": [
+            "prettier --write"
+        ],
+        "*.{ts,js,mjs}": [
+            "eslint --fix"
+        ]
+    }
 }

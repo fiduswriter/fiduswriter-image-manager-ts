@@ -1,1 +1,1 @@
-export const edtfParse = () => ({ valid: false, dates: [] });
+export const edtfParse = () => ({ valid: false, dates: [] })

@@ -1,38 +1,38 @@
-import { escapeText, gettext } from "fwtoolkit";
+import { escapeText, gettext } from "fwtoolkit"
 
-import type { Image, ImageCategory } from "../types.js";
+import type { Image, ImageCategory } from "../types.js"
 
 interface ImageEditCategoryTemplateData {
-  cats: ImageCategory[];
+    cats: ImageCategory[]
 }
 
 interface ImageEditTemplateData {
-  image: Image | false;
-  cats: ImageCategory[];
+    image: Image | false
+    cats: ImageCategory[]
 }
 
 /* A template for the image category selection of the image selection dialog. */
 const imageEditCategoryTemplate = ({ cats }: ImageEditCategoryTemplateData) => {
-  if (!cats.length) {
-    return "";
-  }
-  return `<div class="fw-media-category">
+    if (!cats.length) {
+        return ""
+    }
+    return `<div class="fw-media-category">
             <div>${gettext("Select categories")}</div>
             <div id="image-edit-categories"></div>
-        </div>`;
-};
+        </div>`
+}
 
 /* A template for the form for the image upload dialog. */
 export const imageEditTemplate = ({ image, cats }: ImageEditTemplateData) =>
-  `<div>
+    `<div>
         <input name="title" class="fw-media-title" type="text"
                 placeholder="${gettext("Insert a title")}" value="${
-                  image ? escapeText(image.title) : ""
+                    image ? escapeText(image.title) : ""
                 }" />
         ${
-          image
-            ? ""
-            : `<button type="button" class="fw-media-select-button fw-button fw-light">
+            image
+                ? ""
+                : `<button type="button" class="fw-media-select-button fw-button fw-light">
                 ${gettext("Select a file")}
             </button>
             <input name="image" type="file" class="fw-media-file-input">`
@@ -44,9 +44,9 @@ export const imageEditTemplate = ({ image, cats }: ImageEditTemplateData) =>
         </button>
     <div>
         ${
-          image && image.image
-            ? `<div class="img" style="background-image: url(${image.image});"></div>`
-            : ""
+            image && image.image
+                ? `<div class="img" style="background-image: url(${image.image});"></div>`
+                : ""
         }
     </div></div>
-    ${imageEditCategoryTemplate({ cats })}`;
+    ${imageEditCategoryTemplate({ cats })}`
