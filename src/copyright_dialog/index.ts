@@ -1,14 +1,14 @@
-import { edtfParse } from "bibliojson"
+import {edtfParse} from "bibliojson"
 import deepEqual from "fast-deep-equal"
-import { Dialog, InputList, TypeSwitch, escapeText } from "fwtoolkit"
-import type { InputListItemRenderResult } from "fwtoolkit"
+import {Dialog, InputList, TypeSwitch, escapeText} from "fwtoolkit"
+import type {InputListItemRenderResult} from "fwtoolkit"
 
 import {
     copyrightTemplate,
     licenseInputTemplate,
     licenseSelectTemplate
 } from "./templates.js"
-import type { Copyright, License } from "../types.js"
+import type {Copyright, License} from "../types.js"
 
 export const LICENSE_URLS = [
     ["CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/"],
@@ -132,7 +132,7 @@ export class CopyrightDialog {
                 ".copyright-licenses-list"
             ) as HTMLElement,
             initialValues: this.copyright.licenses || [],
-            emptyValue: { url: "", title: "", start: false },
+            emptyValue: {url: "", title: "", start: false},
             renderItem: (license): InputListItemRenderResult<License> => ({
                 html: `<div class="copyright-license-switch"></div>
                     <div class="field-part field-part-small">
@@ -161,7 +161,7 @@ export class CopyrightDialog {
                         label2: gettext("Custom"),
                         initialMode: mode as 1 | 2,
                         render1: () =>
-                            licenseSelectTemplate({ url: license.url }),
+                            licenseSelectTemplate({url: license.url}),
                         render2: () =>
                             licenseInputTemplate({
                                 url: license.url,

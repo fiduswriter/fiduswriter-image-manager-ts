@@ -1,5 +1,5 @@
-import type { DataTable } from "simple-datatables"
-import type { ImageDB } from "./database.js"
+import type {DataTable} from "simple-datatables"
+import type {ImageDB} from "./database.js"
 
 /** A single license under which an image is available. */
 export interface License {
@@ -124,7 +124,7 @@ export interface ImagesResponse {
 
 /** Response body from `POST /api/usermedia/save/`. */
 export interface SaveImageResponse {
-    errormsg: Record<string, string> & { error?: string }
+    errormsg: Record<string, string> & {error?: string}
     values: Image
 }
 
@@ -155,4 +155,4 @@ export interface DeleteImagesRequest {
     ids: (string | number)[]
 }
 
-export type { DataTable }
+export type {DataTable}

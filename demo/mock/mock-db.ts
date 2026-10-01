@@ -1,4 +1,4 @@
-import type { Image, ImageCategory, ImageManagerApp } from "../../src/types.js"
+import type {Image, ImageCategory, ImageManagerApp} from "../../src/types.js"
 
 /**
  * Minimal mock ImageDB that satisfies the interface expected by ImageOverview.
@@ -15,9 +15,9 @@ export class MockImageDB {
         this.app = app
         this.db = {}
         this.cats = [
-            { id: 1, category_title: "Photos" },
-            { id: 2, category_title: "Illustrations" },
-            { id: 3, category_title: "Diagrams" }
+            {id: 1, category_title: "Photos"},
+            {id: 2, category_title: "Illustrations"},
+            {id: 3, category_title: "Diagrams"}
         ]
 
         // Add a few sample images for demo purposes.

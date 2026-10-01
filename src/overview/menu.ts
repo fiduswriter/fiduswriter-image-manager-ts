@@ -1,9 +1,9 @@
-import { gettext } from "fwtoolkit"
-import type { ContentMenuInit } from "fwtoolkit/content_menu"
-import type { OverviewMenuModel } from "fwtoolkit/overview_menu"
+import {gettext} from "fwtoolkit"
+import type {ContentMenuInit} from "fwtoolkit/content_menu"
+import type {OverviewMenuModel} from "fwtoolkit/overview_menu"
 
-import type { ImageManagerPage } from "../types.js"
-import type { ImageOverview } from "./index.js"
+import type {ImageManagerPage} from "../types.js"
+import type {ImageOverview} from "./index.js"
 
 export const bulkMenuModel = (): ContentMenuInit => ({
     content: [
@@ -61,22 +61,18 @@ export const menuModel = (): OverviewMenuModel => ({
             title: gettext("Upload new image"),
             keys: "Alt-u",
             action: (overview: unknown) => {
-                import("../edit_dialog/index.js").then(
-                    ({ ImageEditDialog }) => {
-                        const imageUpload = new ImageEditDialog(
-                            (overview as ImageOverview).app.imageDB,
-                            false,
-                            overview as ImageManagerPage
-                        )
-                        imageUpload.init().then(imageId => {
-                            if (imageId) {
-                                ;(overview as ImageOverview).updateTable([
-                                    imageId
-                                ])
-                            }
-                        })
-                    }
-                )
+                import("../edit_dialog/index.js").then(({ImageEditDialog}) => {
+                    const imageUpload = new ImageEditDialog(
+                        (overview as ImageOverview).app.imageDB,
+                        false,
+                        overview as ImageManagerPage
+                    )
+                    imageUpload.init().then(imageId => {
+                        if (imageId) {
+                            ;(overview as ImageOverview).updateTable([imageId])
+                        }
+                    })
+                })
             },
             order: 3,
             disabled: (overview: unknown) =>

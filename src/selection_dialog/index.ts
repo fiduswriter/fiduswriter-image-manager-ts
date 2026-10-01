@@ -8,11 +8,11 @@ import {
     gettext,
     staticUrl
 } from "fwtoolkit"
-import type { DialogButtonSpec } from "fwtoolkit/basic"
-import type { DataTable } from "simple-datatables"
-import { E2EEEncryptor } from "fwtoolkit/e2ee/encryptor"
+import type {DialogButtonSpec} from "fwtoolkit/basic"
+import type {DataTable} from "simple-datatables"
+import {E2EEEncryptor} from "fwtoolkit/e2ee/encryptor"
 
-import type { ImageDB } from "../database.js"
+import type {ImageDB} from "../database.js"
 import type {
     ImageManagerPage,
     ImagePicker,
@@ -101,7 +101,7 @@ export class ImageSelectionDialog {
                 classes: "fw-dark",
                 click: () => {
                     this.imageDialog.close()
-                    this.resolveSelection({ id: this.imgId, db: this.imgDb })
+                    this.resolveSelection({id: this.imgId, db: this.imgDb})
                 }
             })
 
@@ -144,7 +144,7 @@ export class ImageSelectionDialog {
     private openUploadDialog(): Promise<unknown> {
         this.uploadInProgress = true
         return import("../edit_dialog/index.js")
-            .then(({ ImageEditDialog }) => {
+            .then(({ImageEditDialog}) => {
                 const targetDB = this.isE2EE() ? this.imageDB : this.userImageDB
                 const imageUpload = new ImageEditDialog(
                     targetDB,

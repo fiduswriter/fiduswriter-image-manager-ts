@@ -26,7 +26,7 @@ export class SelectionDataTable {
         SelectionDataTable.instances.push(this)
     }
     init() {
-        this.table = { columns: { sort: () => {} } }
+        this.table = {columns: {sort: () => {}}}
     }
 }
 export const addAlert = (...args) => {
@@ -35,7 +35,7 @@ export const addAlert = (...args) => {
 addAlert.calls = []
 export const ensureCSS = () => {}
 export const staticUrl = path => path
-export const cancelPromise = () => ({ cancelled: true })
+export const cancelPromise = () => ({cancelled: true})
 export const interpolate = fmt => fmt
 export const dropdownSelect = () => ({
     setValue: () => {},

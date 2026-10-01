@@ -5,11 +5,11 @@ import {
     deactivateWait,
     gettext
 } from "fwtoolkit"
-import type { OverviewMenuDropdownItem } from "fwtoolkit/overview_menu"
+import type {OverviewMenuDropdownItem} from "fwtoolkit/overview_menu"
 
-import { usermediaEditcategoriesTemplate } from "./templates.js"
-import type { ImageOverview } from "./index.js"
-import type { ImageCategory, SaveCategoriesRequest } from "../types.js"
+import {usermediaEditcategoriesTemplate} from "./templates.js"
+import type {ImageOverview} from "./index.js"
+import type {ImageCategory, SaveCategoriesRequest} from "../types.js"
 
 export class ImageOverviewCategories {
     imageOverview: ImageOverview

@@ -15,11 +15,11 @@ import {
     staticUrl,
     whenReady
 } from "fwtoolkit"
-import type { DataTable } from "simple-datatables"
+import type {DataTable} from "simple-datatables"
 
-import { imageOverviewTemplate } from "./templates.js"
-import { ImageOverviewCategories } from "./categories.js"
-import { bulkMenuModel, menuModel } from "./menu.js"
+import {imageOverviewTemplate} from "./templates.js"
+import {ImageOverviewCategories} from "./categories.js"
+import {bulkMenuModel, menuModel} from "./menu.js"
 import type {
     ImageManagerApp,
     ImageManagerPage,
@@ -29,7 +29,7 @@ import type {
 } from "../types.js"
 
 interface DataTableRow {
-    cells: { data: unknown; text?: string }[]
+    cells: {data: unknown; text?: string}[]
 }
 
 interface VirtualNode {
@@ -84,7 +84,7 @@ export class ImageOverview {
         this.plugins = plugins
         this.mod = {}
 
-        this.lastSort = { column: 0, dir: "asc" }
+        this.lastSort = {column: 0, dir: "asc"}
     }
 
     init(): Promise<void> {
@@ -378,7 +378,7 @@ export class ImageOverview {
                     inputNode.attributes!.checked = "checked"
                 }
                 const trNode = tr as {
-                    childNodes: { childNodes: VirtualNode[] }[]
+                    childNodes: {childNodes: VirtualNode[]}[]
                 }
                 trNode.childNodes[0].childNodes = [
                     inputNode,
@@ -416,7 +416,7 @@ export class ImageOverview {
         })
         this.overviewTable.init()
         this.table = this.overviewTable.table!
-        ;(this.table as unknown as { id: string }).id = "imagelist"
+        ;(this.table as unknown as {id: string}).id = "imagelist"
         this.dtBulk = this.overviewTable.dtBulk || null
 
         this.table.on("datatable.sort", (column, dir) => {
@@ -447,7 +447,7 @@ export class ImageOverview {
         if (!isActivationEvent(event)) {
             return
         }
-        const el: { target?: Element | null } = {}
+        const el: {target?: Element | null} = {}
         switch (true) {
             case findTarget(event, ".delete-image", el): {
                 const imageId = (el.target as HTMLElement | null)?.dataset.id
@@ -456,20 +456,18 @@ export class ImageOverview {
             }
             case findTarget(event, ".edit-image", el): {
                 const imageId = (el.target as HTMLElement | null)?.dataset.id
-                import("../edit_dialog/index.js").then(
-                    ({ ImageEditDialog }) => {
-                        const dialog = new ImageEditDialog(
-                            this.app.imageDB,
-                            imageId ? Number.parseInt(imageId) : false,
-                            this as unknown as ImageManagerPage
-                        )
-                        dialog.init().then(() => {
-                            if (imageId) {
-                                this.updateTable([Number.parseInt(imageId)])
-                            }
-                        })
-                    }
-                )
+                import("../edit_dialog/index.js").then(({ImageEditDialog}) => {
+                    const dialog = new ImageEditDialog(
+                        this.app.imageDB,
+                        imageId ? Number.parseInt(imageId) : false,
+                        this as unknown as ImageManagerPage
+                    )
+                    dialog.init().then(() => {
+                        if (imageId) {
+                            this.updateTable([Number.parseInt(imageId)])
+                        }
+                    })
+                })
                 break
             }
             case findTarget(event, ".fw-add-input", el): {

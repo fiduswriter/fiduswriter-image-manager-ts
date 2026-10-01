@@ -8,15 +8,15 @@ import {
     interpolate,
     staticUrl
 } from "fwtoolkit"
-import type { CheckableListOptions } from "fwtoolkit"
-import type { ContentMenuInit } from "fwtoolkit/content_menu"
-import { E2EEEncryptor } from "fwtoolkit/e2ee/encryptor"
+import type {CheckableListOptions} from "fwtoolkit"
+import type {ContentMenuInit} from "fwtoolkit/content_menu"
+import {E2EEEncryptor} from "fwtoolkit/e2ee/encryptor"
 
 import type Cropper from "cropperjs"
 
-import { imageEditModel } from "./model.js"
-import { imageEditTemplate } from "./templates.js"
-import type { ImageDB } from "../database.js"
+import {imageEditModel} from "./model.js"
+import {imageEditTemplate} from "./templates.js"
+import type {ImageDB} from "../database.js"
 import type {
     Copyright,
     Image,
@@ -73,7 +73,7 @@ export class ImageEditDialog {
 
     menu: ContentMenuInit
 
-    catsList: CheckableList | { value: (string | number)[] } = { value: [] }
+    catsList: CheckableList | {value: (string | number)[]} = {value: []}
 
     mediaPreviewerDiv?: HTMLElement
 
@@ -127,7 +127,7 @@ export class ImageEditDialog {
         // An empty model (for example a stub registered by a host application)
         // would render a menu without any entries.
         const pageMenu = (
-            this.page.menu as { imageEditModel?: ContentMenuInit } | undefined
+            this.page.menu as {imageEditModel?: ContentMenuInit} | undefined
         )?.imageEditModel
         this.menu =
             pageMenu &&
@@ -220,7 +220,7 @@ export class ImageEditDialog {
             }
             this.catsList = new CheckableList(checkableOptions)
         } else {
-            this.catsList = { value: [] }
+            this.catsList = {value: []}
         }
 
         if (!this.imageId) {
@@ -460,7 +460,7 @@ export class ImageEditDialog {
                 name = `${name}.${newExt}`
             }
         }
-        return new File([u8arr], name, { type })
+        return new File([u8arr], name, {type})
     }
 
     /**
@@ -531,7 +531,7 @@ export class ImageEditDialog {
             // mapping. Normalize both so the message becomes visible in the form.
             let errors: Record<string, string>
             if (error instanceof Error) {
-                errors = { error: error.message }
+                errors = {error: error.message}
             } else {
                 errors = (error as Record<string, string>) || {}
             }

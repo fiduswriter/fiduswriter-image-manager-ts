@@ -1,4 +1,4 @@
-import { activateWait, addAlert, deactivateWait, gettext } from "fwtoolkit"
+import {activateWait, addAlert, deactivateWait, gettext} from "fwtoolkit"
 
 import type {
     Image,
@@ -40,10 +40,10 @@ export class ImageDB {
 
     saveImage(imageData: SaveImageRequest): Promise<number> {
         activateWait()
-        const { image, ...jsonData } = imageData
+        const {image, ...jsonData} = imageData
 
         return this.app.apiConnectors.image
-            .saveImage(jsonData as SaveImageRequest, image ? { image } : {})
+            .saveImage(jsonData as SaveImageRequest, image ? {image} : {})
             .then(response => {
                 deactivateWait()
                 if (Object.keys(response.errormsg).length) {

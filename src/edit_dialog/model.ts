@@ -1,10 +1,10 @@
 import Cropper from "cropperjs"
 
-import { gettext } from "fwtoolkit"
-import type { ContentMenuInit } from "fwtoolkit/content_menu"
+import {gettext} from "fwtoolkit"
+import type {ContentMenuInit} from "fwtoolkit/content_menu"
 
-import { CopyrightDialog } from "../copyright_dialog/index.js"
-import type { ImageEditDialog } from "./index.js"
+import {CopyrightDialog} from "../copyright_dialog/index.js"
+import type {ImageEditDialog} from "./index.js"
 
 export const imageEditModel = (): ContentMenuInit => ({
     content: [

@@ -1,6 +1,6 @@
-import { escapeText } from "fwtoolkit"
+import {escapeText} from "fwtoolkit"
 
-import type { ImageCategory } from "../types.js"
+import type {ImageCategory} from "../types.js"
 
 /** HTML template for the standalone image overview layout
  *  (without the full page chrome from @fiduswriter/frontend).
@@ -52,6 +52,6 @@ export const usermediaEditcategoriesTemplate = ({
 }: EditcategoriesTemplateData) =>
     `<table id="editCategoryList" class="fw-dialog-table">
         <tbody>
-            ${usermediaCategoryformsTemplate({ categories })}
+            ${usermediaCategoryformsTemplate({categories})}
         </tbody>
     </table>`

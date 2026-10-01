@@ -1,6 +1,6 @@
-import { escapeText, gettext } from "fwtoolkit"
+import {escapeText, gettext} from "fwtoolkit"
 
-import type { Image, ImageCategory } from "../types.js"
+import type {Image, ImageCategory} from "../types.js"
 
 interface ImageEditCategoryTemplateData {
     cats: ImageCategory[]
@@ -12,7 +12,7 @@ interface ImageEditTemplateData {
 }
 
 /* A template for the image category selection of the image selection dialog. */
-const imageEditCategoryTemplate = ({ cats }: ImageEditCategoryTemplateData) => {
+const imageEditCategoryTemplate = ({cats}: ImageEditCategoryTemplateData) => {
     if (!cats.length) {
         return ""
     }
@@ -23,7 +23,7 @@ const imageEditCategoryTemplate = ({ cats }: ImageEditCategoryTemplateData) => {
 }
 
 /* A template for the form for the image upload dialog. */
-export const imageEditTemplate = ({ image, cats }: ImageEditTemplateData) =>
+export const imageEditTemplate = ({image, cats}: ImageEditTemplateData) =>
     `<div>
         <input name="title" class="fw-media-title" type="text"
                 placeholder="${gettext("Insert a title")}" value="${
@@ -49,4 +49,4 @@ export const imageEditTemplate = ({ image, cats }: ImageEditTemplateData) =>
                 : ""
         }
     </div></div>
-    ${imageEditCategoryTemplate({ cats })}`
+    ${imageEditCategoryTemplate({cats})}`

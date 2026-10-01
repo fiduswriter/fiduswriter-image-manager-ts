@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, jest, test } from "@jest/globals"
+import {beforeEach, describe, expect, jest, test} from "@jest/globals"
 
-import { Dialog, SelectionDataTable, addAlert } from "fwtoolkit"
+import {Dialog, SelectionDataTable, addAlert} from "fwtoolkit"
 
-import { ImageSelectionDialog } from "../src/selection_dialog/index.js"
-import type { ImageManagerPage } from "../src/types.js"
+import {ImageSelectionDialog} from "../src/selection_dialog/index.js"
+import type {ImageManagerPage} from "../src/types.js"
 
 // The dialog reports picker failures by rethrowing from a fire-and-forget
 // promise (same pattern as the built-in upload path); keep that from
@@ -34,7 +34,7 @@ const makePage = (
     overrides: Partial<ImageManagerPage> = {}
 ): ImageManagerPage =>
     ({
-        app: { isOffline: () => false },
+        app: {isOffline: () => false},
         ...overrides
     }) as unknown as ImageManagerPage
 
@@ -46,7 +46,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
     })
 
     test("picker replaces the built-in upload dialog and the image gets selected", async () => {
-        const file = new File(["img"], "my_photo.png", { type: "image/png" })
+        const file = new File(["img"], "my_photo.png", {type: "image/png"})
         const picker = jest.fn(() => Promise.resolve(file))
         const docDB = makeDB(null)
         const userDB = makeDB(42)
@@ -54,7 +54,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             docDB as never,
             userDB as never,
             false,
-            makePage({ imagePicker: picker })
+            makePage({imagePicker: picker})
         )
         const initPromise = dialog.init()
 
@@ -87,10 +87,10 @@ describe("ImageSelectionDialog host-provided image picker", () => {
         // The reopened dialog forwards its outcome to init()'s promise.
         const reopened = Dialog.instances[1]
         const useButton = reopened.options.buttons.find(
-            (button: { text?: string }) => button.text === "Use image"
+            (button: {text?: string}) => button.text === "Use image"
         )
         useButton.click()
-        await expect(initPromise).resolves.toEqual({ id: 42, db: "user" })
+        await expect(initPromise).resolves.toEqual({id: 42, db: "user"})
     })
 
     test("a cancelled pick keeps the selection dialog unchanged", async () => {
@@ -100,7 +100,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             makeDB(null) as never,
             userDB as never,
             false,
-            makePage({ imagePicker: picker })
+            makePage({imagePicker: picker})
         )
         dialog.init()
 
@@ -125,7 +125,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             makeDB(null) as never,
             userDB as never,
             false,
-            makePage({ imagePicker: picker })
+            makePage({imagePicker: picker})
         )
         dialog.init()
 
@@ -143,14 +143,14 @@ describe("ImageSelectionDialog host-provided image picker", () => {
     })
 
     test("a failing save alerts and keeps the selection dialog open", async () => {
-        const file = new File(["img"], "my_photo.png", { type: "image/png" })
+        const file = new File(["img"], "my_photo.png", {type: "image/png"})
         const picker = jest.fn(() => Promise.resolve(file))
         const userDB = makeDB(null)
         const dialog = new ImageSelectionDialog(
             makeDB(null) as never,
             userDB as never,
             false,
-            makePage({ imagePicker: picker })
+            makePage({imagePicker: picker})
         )
         dialog.init()
 
@@ -176,7 +176,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             height: 1,
             added: 0,
             cats: [],
-            copyright: { freeToRead: true, licenses: [] }
+            copyright: {freeToRead: true, licenses: []}
         }
         const userDB = makeDB(null)
         userDB.db["1"] = {
@@ -188,7 +188,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             height: 1,
             added: 0,
             cats: [],
-            copyright: { freeToRead: true, licenses: [] }
+            copyright: {freeToRead: true, licenses: []}
         }
         const dialog = new ImageSelectionDialog(
             docDB as never,
@@ -214,7 +214,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             height: 1,
             added: 0,
             cats: [],
-            copyright: { freeToRead: true, licenses: [] }
+            copyright: {freeToRead: true, licenses: []}
         }
         const userDB = makeDB(null)
         userDB.db["1"] = {
@@ -226,7 +226,7 @@ describe("ImageSelectionDialog host-provided image picker", () => {
             height: 1,
             added: 0,
             cats: [],
-            copyright: { freeToRead: true, licenses: [] }
+            copyright: {freeToRead: true, licenses: []}
         }
         const dialog = new ImageSelectionDialog(
             docDB as never,
