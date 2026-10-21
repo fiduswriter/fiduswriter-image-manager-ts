@@ -68,3 +68,22 @@ export const gettext = s => s
 export const localizeDate = () => ""
 export const addDropdown = () => {}
 export const whenReady = () => Promise.resolve()
+
+export const isSafeLinkHref = href => {
+    if (typeof href !== "string") {
+        return false
+    }
+    const trimmed = href.trim()
+    if (!trimmed) {
+        return false
+    }
+    if (trimmed.startsWith("#")) {
+        return true
+    }
+    try {
+        const url = new URL(trimmed, "http://localhost")
+        return ["http:", "https:"].includes(url.protocol)
+    } catch {
+        return false
+    }
+}
